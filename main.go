@@ -12,6 +12,7 @@ func main() {
 		"mint":20,
 		"keyboard":17,
 	}
+
 	http.HandleFunc("/",func(w http.ResponseWriter,r *http.Request) {
 		fmt.Fprintf(w,"Hello Golang Server")
 	})
@@ -34,5 +35,6 @@ func main() {
 	http.HandleFunc("/wtf",func(w http.ResponseWriter,r *http.Request) {
 		fmt.Fprintf(w,"What The Fuck.")
 	})
+	
 	http.ListenAndServe(":8080",nil)
 }
