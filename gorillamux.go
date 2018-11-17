@@ -21,7 +21,7 @@ func main() {
 	}
 
 	router.HandleFunc("/",func(w http.ResponseWriter,r *http.Request) {
-		fmt.Fprintf(w,"Hello Gorilla Mux")
+		http.ServeFile(w,r,"index.html")
 	})
 
 	router.HandleFunc("/information",func(w http.ResponseWriter,r *http.Request) {
@@ -36,11 +36,15 @@ func main() {
 		fmt.Fprintf(w,"What The Fuck.")
 	})
 
+	router.HandleFunc("/idol",func(w http.ResponseWriter,r *http.Request) {
+		http.ServeFile(w,r,"idol.html")
+	})
+
 	router.HandleFunc("/idol/{name}",func(w http.ResponseWriter,r *http.Request) {
 		vars := mux.Vars(r)
 		name := vars["name"]
 		age := idolDB[name]
-		fmt.Fprintf(w,"<h3>My name is %s , My age is %d</h3>",strings.Title(name),age)
+		fmt.Fprintf(w,"My name is %s , My age is %d",strings.Title(name),age)
 	}).Methods("GET")
 
 	http.ListenAndServe(":8080",router)
