@@ -5,9 +5,17 @@ import (
 	"strings"
 	"net/http"
 	"github.com/gorilla/mux"
+	"html/template"
 )
 
+type Single struct{
+	Name string
+	Album string
+}
+
 func main() {
+	var templates = template.Must(template.ParseFiles("single.html"))
+
 	router := mux.NewRouter()
 
 	idolDB := map[string]int{
@@ -22,6 +30,11 @@ func main() {
 
 	router.HandleFunc("/",func(w http.ResponseWriter,r *http.Request) {
 		http.ServeFile(w,r,"index.html")
+	})
+
+	router.HandleFunc("/single",func(w http.ResponseWriter,r *http.Request) {
+		mySingle := Single{"Milky Way","Party Time"}
+		templates.ExecuteTemplate(w,"single.html",mySingle)
 	})
 
 	router.HandleFunc("/information",func(w http.ResponseWriter,r *http.Request) {
