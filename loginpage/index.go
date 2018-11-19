@@ -5,7 +5,14 @@ import (
 	"net/http"
 	"os"
 	"io"
+	"time"
 )
+
+type Cookie struct{
+	Name string
+	Value string
+	Expires time.Time
+}
 
 func main() {
 	http.HandleFunc("/",index)
@@ -13,6 +20,7 @@ func main() {
 	http.HandleFunc("/signup",signup)
 	http.HandleFunc("/single",single)
 	http.HandleFunc("/loginpage",loginpage)
+	http.HandleFunc("/cookie",cookie)
 	http.HandleFunc("/upload",upload)
 	http.HandleFunc("/uploadpage",uploadpage)
 	http.ListenAndServe(":8080",nil)
@@ -32,6 +40,13 @@ func signup(w http.ResponseWriter,r *http.Request) {
 
 func single(w http.ResponseWriter,r *http.Request) {
 	http.ServeFile(w,r,"single.html")
+}
+
+func cookie(w http.ResponseWriter,r *http.Request) {
+	expiration := time.Now().Add(time.Hour*24*365)
+	cookie := http.Cookie{Name : "user",Value : "HelloGolang",Expires : expiration}
+	http.SetCookie(w,&cookie)
+	fmt.Fprintf(w,"Create Cookie.")
 }
 
 func upload(w http.ResponseWriter,r *http.Request) {
